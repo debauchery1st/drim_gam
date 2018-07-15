@@ -1,2 +1,4 @@
+pyglet
 astar
 pytest
+cocos2d

@@ -1,10 +1,8 @@
-from DreamGame import DreamGame
-from content.base_types.demo_hero import demohero_basetype
-from content.dungeons.demo_dungeon import demo_dungeon
-from game_objects.battlefield_objects.Unit import Unit
+import cocos
+from gui.base import init_gui
+from gui.menu import MainMenuScene
 
-game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
-print(game)
-game.print_all_units()
-hero_turns = game.loop(player_berserk=True)
-print("hero has made {} turns.".format(hero_turns))
+init_gui()
+
+main_menu_scene = MainMenuScene()
+cocos.director.director.run(main_menu_scene)
