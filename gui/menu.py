@@ -5,9 +5,12 @@ from DreamGame import DreamGame
 from content.base_types.demo_hero import demohero_basetype
 from content.dungeons.demo_dungeon import demo_dungeon
 from game_objects.battlefield_objects.Unit import Unit
+from gui.gameplay import GamePlayScene
 
 
 class BackgroundMainMenuLayer(cocos.layer.ColorLayer):
+    """STUB"""
+
     def __init__(self):
         __color = (255, 255, 255, 255)
         super(BackgroundMainMenuLayer, self).__init__(*__color)
@@ -30,7 +33,7 @@ class MenuMainMenuLayer(cocos.menu.Menu):
             (cocos.menu.MenuItem("New game", self.new_game)),
             (cocos.menu.MenuItem("Load game", self.load_game)),
             (cocos.menu.MenuItem("Credits", self.show_credits)),
-            (cocos.menu.MenuItem("Exit", self.on_exit))
+            (cocos.menu.MenuItem("Exit", self.on_quit()))
         ]
 
         self.create_menu(menu_items)
@@ -40,9 +43,11 @@ class MenuMainMenuLayer(cocos.menu.Menu):
         game = DreamGame.start_dungeon(demo_dungeon, Unit(demohero_basetype))
         print(game)
         game.print_all_units()
-        hero_turns = game.loop(player_berserk=True)
-        print("hero has made {} turns.".format(hero_turns))
-        self.on_exit()
+        game.player_berserk = True
+        cocos.director.director.replace(GamePlayScene(game))
+        # hero_turns = game.loop(player_berserk=True)
+        # print("hero has made {} turns.".format(hero_turns))
+        # self.on_exit()
 
     def load_game(self):
         pass
@@ -50,7 +55,7 @@ class MenuMainMenuLayer(cocos.menu.Menu):
     def show_credits(self):
         pass
 
-    def on_exit(self):
+    def on_quit(self):
         # TODO: add some logic here
         pyglet.app.exit()
 

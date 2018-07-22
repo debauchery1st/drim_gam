@@ -1,3 +1,4 @@
+import pyglet
 from battlefield.Battlefield import Battlefield, Cell
 from mechanics.combat import Attack
 from mechanics.turns import SequentialTM
@@ -16,12 +17,12 @@ class DreamGame:
         self.brute_ai = AstarAI(bf, self.fractions)
         self.random_ai = RandomAI(bf)
         self.turns_manager = None
+        self.count_hero_turns = 0
+        self.player_berserk = False
         my_globals.the_game = self
 
         if unit_locations:
             bf.place_many(unit_locations)
-
-
 
     @staticmethod
     def start_dungeon(dungeon, hero):
@@ -113,6 +114,32 @@ class DreamGame:
                 print(game_over)
                 return count_hero_turns
             # self.print_all_units()
+
+    def update(self):
+        active_unit = self.turns_manager.get_next()
+        target_cell = None
+        if self.fractions[active_unit] is Fractions.PLAYER:
+            self.count_hero_turns += 1
+            if self.player_berserk:
+                target_cell = self.brute_ai.decide_step(active_unit, target_fraction=Fractions.ENEMY)
+            else:
+                # TODO: handle input in another way
+                orders = input("Tell me where to go!")
+                x, y = [int(coord) for coord in orders.split()]
+                print(x, y)
+                target_cell = Cell(x, y)
+
+        elif self.fractions[active_unit] is Fractions.ENEMY:
+            target_cell = self.brute_ai.decide_step(active_unit)
+        elif self.fractions[active_unit] is Fractions.NEUTRALS:
+            target_cell = self.random_ai.decide_step(active_unit)
+
+        self.order_move(active_unit, target_cell)
+        game_over = self.game_over()
+        if game_over:
+            print(game_over)
+            pyglet.app.exit()
+            # TODO: switch to game over scene
 
     def game_over(self):
         own_units = [unit for unit in self.fractions if self.fractions[unit] is Fractions.PLAYER]
