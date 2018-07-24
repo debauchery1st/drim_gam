@@ -1,13 +1,13 @@
-from mechanics.events.src.Event import Event
-from mechanics.events import EventsChannels
+from mechanics.events.Event import Event
+from mechanics.events.EventsPlatform import EventsChannels
 import my_globals
 
 class UnitDiedEvent(Event):
     channel = EventsChannels.UnitDiedChannel
 
-    def __init__(self, unit):
+    def __init__(self, unit, killer):
         self.unit = unit
-        self.killer = unit.last_damaged_by
+        self.killer = killer
         super().__init__()
 
     def check_conditions(self):

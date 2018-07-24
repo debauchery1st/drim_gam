@@ -3,6 +3,7 @@ from mechanics.AI import RandomAI
 from astar import AStar
 from mechanics.damage import Damage
 
+
 class StarPathSearch(AStar):
     really_big_number = 1e50
 
@@ -28,9 +29,6 @@ class StarPathSearch(AStar):
 
     def heuristic_cost_estimate(self, current, goal):
         return self.battlefield.distance(current, goal)
-
-
-
 
 
 class AstarAI:

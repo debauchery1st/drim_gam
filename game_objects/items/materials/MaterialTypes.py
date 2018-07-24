@@ -1,4 +1,4 @@
-from my_utils.named_enums import NameEnum, auto
+from utils.named_enums import NameEnum, auto
 from mechanics.damage import DamageTypes, DamageTypeGroups
 
 class MaterialTypes(NameEnum):

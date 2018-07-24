@@ -1,6 +1,5 @@
 from content.triggers.immortality import immortality, undead_n_hits, refraction
-from mechanics.damage import Damage, DamageTypes
-from mechanics.events import DamageEvent
+from mechanics.damage import DamageEvent, Damage, DamageTypes
 import pytest
 
 def test_immortality(game, hero):

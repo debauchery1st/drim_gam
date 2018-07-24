@@ -1,4 +1,4 @@
-from my_utils.named_enums import NameEnum, auto
+from utils.named_enums import NameEnum, auto
 
 class ItemTypes(NameEnum):
     BODY_ARMOR = auto()
@@ -9,9 +9,5 @@ class ItemTypes(NameEnum):
 
     MATERIAL = auto()
     BLUEPRINT = auto()
-
-    RUNE = auto()
-    SPELL_CONCEPT = auto()
-    SPELL = auto()
 
 

@@ -1,10 +1,10 @@
-from functools import lru_cache
+from common import xprint
+
 
 class ChanceCalculator:
     advantage_to_double = 25
 
     @staticmethod
-    @lru_cache()
     def chance(base_prob, precision, evasion):
         assert 0 <= base_prob <= 1
         if base_prob == 0 or base_prob == 1:
@@ -33,7 +33,6 @@ class ChanceCalculator:
         return new_chance
 
 
-
 if __name__ == "__main__":
 
     for base_chance in [0.01, 0.1, 0.25, 0.5, 0.75, 0.9, 0.99]:
@@ -42,4 +41,4 @@ if __name__ == "__main__":
                 adv = 1 + (defense - attack) / ChanceCalculator.advantage_to_double
             else:
                 adv = 1 / (1 + (attack - defense) / ChanceCalculator.advantage_to_double)
-            print(base_chance, attack, defense, adv, ChanceCalculator.chance(base_chance, attack, defense))
+            xprint(base_chance, attack, defense, adv, ChanceCalculator.chance(base_chance, attack, defense))

@@ -2,7 +2,7 @@ import pytest
 
 from DreamGame import DreamGame
 from battlefield.Battlefield import Cell, Battlefield
-from game_objects.battlefield_objects import Unit, BaseType, Obstacle
+from game_objects.battlefield_objects import Unit, BaseType
 from game_objects.dungeon.Dungeon import Dungeon
 from mechanics.damage import DamageTypeGroups
 from mechanics.chances import ChanceCalculator
@@ -24,12 +24,12 @@ def demohero_basetype():
     yield  _demohero_basetype
 
 @pytest.fixture()
-def steel_wall():
+def steel_wall_type():
     resists = {x: -0.6 for x in DamageTypeGroups.physical}
     resists.update({x: 0.75 for x in DamageTypeGroups.elemental})
 
-    _steel_wall = Obstacle("Wall of steel!", 5000, resists=resists, armor=500, icon="wall.png")
-    return _steel_wall
+    _steel_wall_type = BaseType({}, "Wall of steel!", resists=resists, armor_base=500, icon="wall.png")
+    return _steel_wall_type
 
 
 @pytest.fixture()
@@ -41,13 +41,13 @@ def demo_dungeon(pirate_band):
     yield  demo_dungeon
 
 @pytest.fixture()
-def walls_dungeon(pirate_basetype, steel_wall):
+def walls_dungeon(pirate_basetype, steel_wall_type):
 
     unit_locations = {}
 
     wall_x = 4
     for wall_y in range(0, 6):
-        unit_locations[steel_wall.clone()] =  Cell(wall_x, wall_y)
+        unit_locations[Unit(steel_wall_type)] = Cell(wall_x, wall_y)
 
     unit_locations[Unit(pirate_basetype)] = Cell(7, 0)
     _walls_dungeon = Dungeon(unit_locations, 8, 8, hero_entrance=Cell(0, 0))
@@ -64,11 +64,8 @@ def pirate(pirate_basetype):
     yield Unit(pirate_basetype)
 
 @pytest.fixture()
-def game(battlefield):
-    _game = DreamGame(battlefield)
-    _game.fractions.update({unit: "QUACK" for unit in battlefield.unit_locations if not unit.is_obstacle})
-    for unit in battlefield.unit_locations:
-        _game.turns_manager.add_unit(unit)
+def game(demo_dungeon, hero):
+    _game = DreamGame.start_dungeon(demo_dungeon, hero)
     yield _game
 
 @pytest.fixture()

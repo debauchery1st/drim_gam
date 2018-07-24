@@ -1,19 +1,16 @@
 from character_creation.MasteriesEnum import MasteriesEnum, MasteriesGroups
 from functools import lru_cache
+from common import xprint
+
 
 class Masteries:
-    def __init__(self, exp=0):
-        exp_per_mastery = int(exp / len(MasteriesEnum))
-        self.exp_spent = {m:exp_per_mastery for m in MasteriesEnum}
-
-    @property
-    def total_exp_spent(self):
-        return sum(self.exp_spent.values())
+    def __init__(self):
+        self.exp_spent = {m:0 for m in MasteriesEnum}
 
     @staticmethod
     @lru_cache(maxsize=512)
     def increment_cost(current_level):
-        if current_level <= 0:
+        if current_level == 0:
             return 4
         else:
             if current_level <= 100:
@@ -38,19 +35,19 @@ class Masteries:
     def values(self):
         return { m: Masteries.achieved_level(exp) for m, exp in self.exp_spent.items()}
 
-    # @staticmethod
-    # def requirements(m, level):
-    #     reqs = {}
-    #     for mastery in MasteriesEnum:
-    #         coupling = MasteriesGroups.coupling(mastery, m)
-    #         if mastery is not m and coupling > 0:
-    #             reqs[mastery] = int(level * coupling)
-    #
-    #     return reqs
+    @staticmethod
+    def requirements(m, level):
+        reqs = {}
+        for mastery in MasteriesEnum:
+            coupling = MasteriesGroups.coupling(mastery, m)
+            if mastery is not m and coupling > 0:
+                reqs[mastery] = int(level * coupling)
+
+        return reqs
 
     def calculate_cost(self, mastery_up):
 
-        direct_cost = self.cumulative_cost(self.values[mastery_up] + 1) - self.exp_spent[mastery_up]
+        direct_cost = self.increment_cost(self.values[mastery_up] + 1)
         indirect_costs = {}
         for mastery in MasteriesEnum:
             coupling = MasteriesGroups.coupling(mastery, mastery_up)
@@ -65,12 +62,6 @@ class Masteries:
         self.exp_spent[mastery_up] += direct_cost
         for m in indirect_costs:
             self.exp_spent[m] += indirect_costs[m]
-
-
-    def __getitem__(self, item):
-        exp = self.exp_spent[item]
-        lvl = self.achieved_level(exp)
-        return lvl
 
 
 
@@ -95,22 +86,22 @@ if __name__ == "__main__":
     # masteries.exp_spent[MasteriesEnum.SWORD] = 15000
     # masteries.exp_spent[MasteriesEnum.CLUB] = 70
 
-    print(masteries.exp_spent)
-    print(masteries.values)
+    xprint(masteries.exp_spent)
+    xprint(masteries.values)
 
     while masteries.values[MasteriesEnum.CLUB]<10:
         masteries.level_up(MasteriesEnum.CLUB)
-    print(masteries.level_up(MasteriesEnum.CLUB))
-    print(masteries.exp_spent)
-    print(masteries.values)
+    xprint(masteries.level_up(MasteriesEnum.CLUB))
+    xprint(masteries.exp_spent)
+    xprint(masteries.values)
     while masteries.values[MasteriesEnum.AXE]<30:
         masteries.level_up(MasteriesEnum.AXE)
-    print(masteries.level_up(MasteriesEnum.AXE))
-    print(masteries.exp_spent)
-    print(masteries.values)
+    xprint(masteries.level_up(MasteriesEnum.AXE))
+    xprint(masteries.exp_spent)
+    xprint(masteries.values)
     while masteries.values[MasteriesEnum.SWORD]<50:
         masteries.level_up(MasteriesEnum.SWORD)
-    print(masteries.level_up(MasteriesEnum.SWORD))
-    print(masteries.exp_spent)
-    print(masteries.values)
+    xprint(masteries.level_up(MasteriesEnum.SWORD))
+    xprint(masteries.exp_spent)
+    xprint(masteries.values)
 

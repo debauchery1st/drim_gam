@@ -1,4 +1,4 @@
-from mechanics.events import DamageEvent
+from mechanics.combat import Attack
 import pytest
 
 
@@ -9,7 +9,7 @@ def test_loses_durability(hero, weapon, pirate, armor, no_chances):
     weapon_dur_before = weapon.durability
     armor_dur_before = armor.durability
 
-    DamageEvent(None, pirate, source=hero, weapon=weapon)
+    Attack.attack(hero, pirate)
 
     weapon_dur_after = weapon.durability
     armor_dur_after = armor.durability

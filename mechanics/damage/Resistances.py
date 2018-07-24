@@ -1,5 +1,5 @@
 from mechanics.damage.DamageTypes import DamageTypes
-from my_utils.utils import clamp
+from utils.numeric import clamp
 
 class Resistances:
     MAX_RESISTANCE = 0.95

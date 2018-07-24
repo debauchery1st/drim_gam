@@ -1,4 +1,6 @@
-from my_utils.named_enums import NameEnum, auto
+from utils.named_enums import NameEnum, auto
+from common import xprint
+
 
 class DamageTypes(NameEnum):
     SLASH = auto()
@@ -19,4 +21,4 @@ class DamageTypeGroups:
     exotic = {DamageTypes.SONIC}
 
 if __name__ == "__main__":
-    print(list(DamageTypes))
+    xprint(list(DamageTypes))

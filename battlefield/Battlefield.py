@@ -1,39 +1,29 @@
-from battlefield.Facing import Facing
-from battlefield.Cell import Cell
-from battlefield.Vision import Vision
-from game_objects.battlefield_objects import Unit
+from math import hypot
+from collections import namedtuple
+
+Cell = namedtuple("Cell", "x y")
+
 
 class Battlefield:
     def __init__(self, w, h):
         self.w = w
         self.h = h
-        self.units_at = {}              #cell -> unit
-        self.unit_locations = {}        #unit -> cell
-        self.unit_facings = {}          #unit -> direction
-        self.vision = Vision(self)
-
-    def x_sees_y(self, x, y):
-        if x.is_obstacle:
-            return False
-
-        cells_x_sees = self.vision.std_seen_cells(x)
-        return self.unit_locations[y] in cells_x_sees
+        self.units_at = {}
+        self.unit_locations = {}
 
     @staticmethod
-    def _distance(p1, p2):
-        return Vision._distance(p1, p2)
-
-    def distance(self, one, another):
-        if not isinstance(one, Cell):
-            one = self.unit_locations[one]
-        if not isinstance(another, Cell):
-            another = self.unit_locations[another]
-        return self._distance(one, another)
+    def distance(p1, p2):
+        return hypot(p1.x - p2.x, p1.y - p2.y)
 
     def get_units_dists_to(self, p, units_subset = None):
-        unit_dist_tuples = [ (u, self.distance(p, u))
+        unit_dist_tuples = [ (u, Battlefield.distance(p, self.unit_locations[u]))
                              for u in units_subset or self.unit_locations]
         return sorted(unit_dist_tuples, key=lambda x:x[1])
+
+    def distance_unit_to_point(self, unit, p):
+        assert unit in self.unit_locations
+        unit_pos = self.unit_locations[unit]
+        return Battlefield.distance(unit_pos, p)
 
     def get_unit_at(self, cell):
         if cell in self.units_at:
@@ -56,7 +46,7 @@ class Battlefield:
             for dy in steps:
                 if 0 <= x + dx < self.w and 0 <= y + dy < self.h:
                     new_cell = Cell(x + dx, y + dy)
-                    if self._distance(cell, new_cell) <= distance:
+                    if Battlefield.distance(cell, new_cell) <= distance:
                         neighbours.append(new_cell)
 
         return neighbours
@@ -65,23 +55,16 @@ class Battlefield:
         pairs = [(c, self.distance(c, target)) for c in candidates]
         return min(pairs, key=lambda x:x[1])
 
-
-
-    def place(self, unit, p, facing=None):
-
+    def place(self, unit, p):
         assert 0 <= p.x < self.w
         assert 0 <= p.y < self.h
         assert p not in self.units_at
-
         self.units_at[p] = unit
         self.unit_locations[unit] = p
-        if isinstance(unit, Unit):
-            self.unit_facings[unit] = facing or Facing.NORTH
 
     def place_many(self, unit_locations):
         for char, p in unit_locations.items():
             self.place(char, p)
-
 
     def remove(self, unit):
         assert unit in self.unit_locations
@@ -90,14 +73,9 @@ class Battlefield:
         del self.unit_locations[unit]
 
     def move(self, unit, new_position):
+        old_position = self.unit_locations[unit]
         self.remove(unit)
         self.place(unit, new_position)
-
-    def angle_to(self, unit, target_cell):
-        facing = self.unit_facings[unit]
-        location = self.unit_locations[unit]
-        vector_to_target = target_cell.complex - location.complex
-        return Cell.angle_between(facing, vector_to_target)
 
 
 

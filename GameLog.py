@@ -1,9 +1,12 @@
 from enum import Enum, auto
+from common import xprint
+
 
 class LogTargets(Enum):
     FILE = auto()
     PRINT = auto()
     SILENT = auto()
+
 
 class GameLog:
     the_log = None
@@ -17,9 +20,10 @@ class GameLog:
         if self.target == LogTargets.SILENT:
             return
         elif self.target == LogTargets.PRINT:
-            print(msg)
+            xprint(msg)
         elif self.target == LogTargets.FILE:
             raise NotImplemented
+
 
 gamelog = GameLog(LogTargets.PRINT)
 

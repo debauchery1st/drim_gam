@@ -1,6 +1,6 @@
-from mechanics.events import Trigger
+from mechanics.events.Trigger import Trigger
 from mechanics.combat.AttackEvent import AttackEvent
-from mechanics.events import DamageEvent
+from mechanics.damage import DamageEvent
 
 
 def damage_to_attackers(source, protected_unit, damage, interrupt=False):

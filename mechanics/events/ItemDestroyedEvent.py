@@ -1,5 +1,6 @@
-from mechanics.events.src.Event import Event
-from mechanics.events import EventsChannels
+from mechanics.events.Event import Event
+from mechanics.events.EventsPlatform import EventsChannels
+
 
 class ItemDestroyedEvent(Event):
     channel = EventsChannels.ItemDestroyedChannel

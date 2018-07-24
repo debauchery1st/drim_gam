@@ -1,5 +1,7 @@
-from my_utils.named_enums import NameEnum, auto
+from utils.named_enums import NameEnum, auto
 from functools import lru_cache
+from common import xprint
+
 
 class MasteriesEnum(NameEnum):
     AXE = auto()
@@ -9,7 +11,7 @@ class MasteriesEnum(NameEnum):
     CLUB = auto()
     HAMMER = auto()
     EXOTIC = auto()
-    UNARMED = auto()
+    SHIELD = auto()
     DUAL = auto()
     TWO_HANDED = auto()
 
@@ -23,13 +25,7 @@ class MasteriesEnum(NameEnum):
     ASTRAL = auto()
     MIND = auto()
 
-    HOLY = auto()
-    DARK = auto()
-    NATURE = auto()
-
-    SHIELD = auto()
-    BOW = auto()
-    SHOOT = auto()
+    RANGED = auto()
     THROW = auto()
     STEALTH = auto()
     SEARCH = auto()
@@ -43,24 +39,24 @@ class MasteriesEnum(NameEnum):
 class MasteriesGroups:
 
     m = MasteriesEnum
-    sporty = [m.ATHLETICS, m.TWO_HANDED, m.DUAL, m.SHIELD, m.UNARMED]
+    sporty = [m.ATHLETICS, m.TWO_HANDED, m.DUAL, m.SHIELD]
     chop_chop_chop = [m.AXE, m.HAMMER, m.TWO_HANDED, m.SWORD]
     stabby = [m.DAGGER, m.SPEAR, m.EXOTIC]
-    bashy = [m.CLUB, m.HAMMER, m.SHIELD, m.UNARMED]
+    bashy = [m.CLUB, m.HAMMER, m.SHIELD]
     assasin = [m.DAGGER, m.DUAL, m.ACROBATICS, m.STEALTH, m.SEARCH]
-    sniping = [m.BOW, m.SHOOT, m.THROW, m.LIGHT, m.SPEAR, m.SEARCH]
+    sniping = [m.RANGED, m.THROW, m.LIGHT, m.SPEAR, m.SEARCH]
     spicky = [m.SPEAR, m.LIGHTNING, m.LIGHT]
-    loud = [m.SONIC, m.HAMMER, m.TWO_HANDED, m.EARTH, m.UNARMED]
-    explosive = [m.FIRE, m.EARTH, m.SONIC, m.AXE, m.SHOOT]
+    loud = [m.SONIC, m.HAMMER, m.TWO_HANDED, m.EARTH]
+    explosive = [m.FIRE, m.EARTH, m.SONIC, m.AXE]
     cold = [m.ARMORY, m.SWORD, m.DAGGER, m.FROST]
     arcane = [m.MIND, m.ASTRAL, m.LORE, m.MONSTROLOGY, m.ALCHEMY]
-    chemical = [m.ACID, m.ALCHEMY, m.EARTH, m.MONSTROLOGY, m.SHOOT]
+    chemical = [m.ACID, m.ALCHEMY, m.EARTH, m.MONSTROLOGY]
     defensive = [m.SHIELD, m.ARMORY, m.EARTH]
-    all_battle = [m.CLUB, m.SWORD, m.AXE, m.ARMORY, m.DAGGER, m.SPEAR, m.UNARMED,
-                  m.BOW, m.EXOTIC, m.HAMMER, m.SHIELD, m.DUAL, m.TWO_HANDED, m.SHOOT]
+    all_battle = [m.CLUB, m.SWORD, m.AXE, m.ARMORY, m.DAGGER, m.SPEAR,
+                  m.RANGED, m.EXOTIC, m.HAMMER, m.SHIELD, m.DUAL, m.TWO_HANDED]
 
     all_magic = [m.FROST, m.FIRE, m.LIGHT, m.LIGHTNING, m.EARTH,
-                 m.ACID, m.SONIC, m.ASTRAL, m.MIND, m.HOLY, m.DARK, m.NATURE]
+                 m.ACID, m.SONIC, m.ASTRAL, m.MIND]
 
     all_misc = [m.THROW, m.STEALTH, m.SEARCH, m.MONSTROLOGY, m.ACROBATICS, m.ATHLETICS,
                 m.LORE, m.ALCHEMY]
@@ -106,9 +102,9 @@ class MasteriesGroups:
 
 if __name__ == "__main__":
     for m in MasteriesEnum:
-        print(m, MasteriesGroups.occurances(m))
-    print(MasteriesGroups.total_occurances())
+        xprint(m, MasteriesGroups.occurances(m))
+    xprint(MasteriesGroups.total_occurances())
 
     for m1 in MasteriesEnum:
         for m2 in MasteriesEnum:
-            print(m1, m2, MasteriesGroups.coupling(m1, m2))
+            xprint(m1, m2, MasteriesGroups.coupling(m1, m2))
