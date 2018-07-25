@@ -32,10 +32,44 @@ class QuickLog:
             return setattr(QuickLog.__instance, key, value)
 
 
-qlog = QuickLog()
+qlog = QuickLog()  # a highlander log
+
+# The cli (Godot) parses the log, line by line,
+# playing the AI battle scenario like a karaoke song.
+#
+# The only thing I found missing from the battle log was
+# fixed by wrapping the **(AttackEvent) with a new decorator I called *(@war_gps)
+#                  * see: demo/decorators.py
+#                 ** see: mechanics/combat/AttackEvent.py:
+#
+# LOG_LANG is used in the Godot Project to parse the log
+# (I am leaving it here as a reference)
+
+LOG_LANG = {
+    "INIT": "There is a ",
+    "ATTR": " with ",
+    "LOCATION": " at ",
+    "MOVES": " moves from ",
+    "A2B": " to ",
+    "ATTACK": " attacks ",
+    "DAMAGE": "DamageTypes",
+    "IMPACT": "ImpactFactor",
+    "DEATH": " is killed by ",
+    "WIN": "VICTORY",
+    "MISS": "MISS",
+    "HIT": "HIT",
+    "GRAZE": "GRAZE",
+    "CRUSH": "CRUSH",
+    "CRITICAL": "CRIT",
+    "TAKES0": " recieves ",
+    "TAKES1": " receives ",
+    "WAR_GPS": "[WAR_GPS]"
+}
 
 
 def xprint(*args):
+    """ use "xprint" instead of "print" if you want the Godot client to hear you. """
+    # wrap with a timestamp and echo to highlander log
     now = datetime.utcnow().replace(second=0, microsecond=0)
     test = now.isoformat("T") + "Z"
     res = "[{}]".format(test)
